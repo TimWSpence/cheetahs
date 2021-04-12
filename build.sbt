@@ -44,7 +44,7 @@ addCommandAlias("ciJVM", "; project cheetahs; headerCheck; scalafmtCheck; clean;
 addCommandAlias("prePR", "; project `cheetahs`; clean; scalafmtAll; headerCreate")
 
 val CatsVersion = "2.4.2"
-val CatsEffectVersion = "3.0.0-RC2"
+val CatsEffectVersion = "3.0.2"
 val DisciplineVersion = "1.0.6"
 val ScalaCheckVersion = "1.15.3"
 val MunitVersion = "0.7.22"
@@ -65,9 +65,7 @@ lazy val `cheetahs` = project.in(file("."))
   .aggregate(
     core,
     benchmarks,
-    docs,
-    examples,
-    laws,
+    docs
   )
   .settings(noPublishSettings)
 
@@ -75,6 +73,7 @@ lazy val core = project.in(file("core"))
   .settings(commonSettings)
   .settings(
     name := "cheetahs"
+  )
   .settings(testFrameworks += new TestFramework("munit.Framework"))
 
 lazy val benchmarks = project.in(file("benchmarks"))
