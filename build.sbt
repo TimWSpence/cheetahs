@@ -11,7 +11,7 @@ ThisBuild / developers := List(
 
 val PrimaryOS = "ubuntu-latest"
 
-val Scala3 = "3.0.0-RC1"
+val Scala3 = "3.0.0-RC2"
 
 ThisBuild / crossScalaVersions := Seq("3.0.0-M3", Scala3)
 
@@ -43,13 +43,10 @@ addCommandAlias("ciJVM", "; project cheetahs; headerCheck; scalafmtCheck; clean;
 
 addCommandAlias("prePR", "; project `cheetahs`; clean; scalafmtAll; headerCreate")
 
-val CatsVersion = "2.4.2"
-val CatsEffectVersion = "3.0.2"
 val DisciplineVersion = "1.0.6"
 val ScalaCheckVersion = "1.15.3"
-val MunitVersion = "0.7.22"
-val MunitCatsEffectVersion = "0.13.1"
-val ScalacheckEffectVersion = "0.7.1"
+val MunitVersion = "0.7.23"
+val ShapelessVersion = "3.0.0-M1"
 
 ThisBuild / scalafixDependencies += "com.github.liancheng" %% "organize-imports" % "0.4.4"
 inThisBuild(
@@ -72,7 +69,8 @@ lazy val `cheetahs` = project.in(file("."))
 lazy val core = project.in(file("core"))
   .settings(commonSettings)
   .settings(
-    name := "cheetahs"
+    name := "cheetahs",
+    scalacOptions := scalacOptions.value.filterNot(_ == "-source:3.0-migration") :+ "-source:future",
   )
   .settings(testFrameworks += new TestFramework("munit.Framework"))
 
@@ -99,13 +97,10 @@ lazy val docs = project.in(file("cheetahs-docs"))
 lazy val commonSettings = Seq(
   organizationHomepage := Some(url("https://github.com/TimWSpence")),
   libraryDependencies ++= Seq(
-    "org.typelevel"              %% "cats-effect"               % CatsEffectVersion,
-    "org.typelevel"              %% "cats-core"                 % CatsVersion,
+    // "org.typelevel"              %% "shapeless3-deriving"       % ShapelessVersion,
     "org.scalacheck"             %% "scalacheck"                % ScalaCheckVersion % Test,
     "org.scalameta"              %% "munit"                     % MunitVersion % Test,
     "org.scalameta"              %% "munit-scalacheck"          % MunitVersion % Test,
-    "org.typelevel"              %% "scalacheck-effect-munit"   % ScalacheckEffectVersion % Test,
-    "org.typelevel"              %% "munit-cats-effect-3"         % MunitCatsEffectVersion % Test
   )
 )
 
