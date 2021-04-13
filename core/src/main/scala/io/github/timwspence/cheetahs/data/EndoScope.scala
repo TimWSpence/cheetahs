@@ -17,8 +17,22 @@
 package io.github.timwspence.cheetahs
 package data
 
-type OptionT[F[_], A] = OptionTScope.OptionT[F, A]
-val OptionT = OptionTScope.OptionT
+object EndoScope:
+  opaque type Endo[A] = A => A
 
-type Endo[A] = EndoScope.Endo[A]
-val Endo = EndoScope.Endo
+  object Endo:
+
+    extension [A](endo: Endo[A])
+      def apply(a: A): A = endo.apply(a)
+
+      def andThen(o: Endo[A]): Endo[A] = endo.andThen(o)
+
+      def compose(o: Endo[A]): Endo[A] = endo.compose(o)
+
+    given [A]: Coerce[A => A, Endo[A]] with {}
+
+    given [A]: Monoid[Endo[A]] with
+
+      def empty: Endo[A] = identity
+
+      def combine(l: Endo[A], r: Endo[A]): Endo[A] = l.andThen(r)

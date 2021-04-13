@@ -15,10 +15,12 @@
  */
 
 package io.github.timwspence.cheetahs
-package data
 
-type OptionT[F[_], A] = OptionTScope.OptionT[F, A]
-val OptionT = OptionTScope.OptionT
+trait Semigroup[A]:
+  def combine(l: A, r: A): A
 
-type Endo[A] = EndoScope.Endo[A]
-val Endo = EndoScope.Endo
+  extension (x: A)
+    infix def |+|(o: A): A = combine(x, o)
+
+object Semigroup:
+  def apply[A](using A: Semigroup[A]): A.type = A

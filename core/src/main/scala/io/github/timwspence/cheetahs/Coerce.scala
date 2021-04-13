@@ -37,7 +37,7 @@ object Coerce extends CoerceInstances:
   /**
    * Relation is preserved by functors
    *
-   * Equivalent to `Functor[F].map(fa)(coerce(_))` but O(1)
+   * Equivalent to `Functor[F].map(fa)(_.coerce[B])` but O(1)
    */
   given [F[_], A, B](using Coerce[A, B], Functor[F]): Coerce[F[A], F[B]] with {}
 

@@ -15,10 +15,12 @@
  */
 
 package io.github.timwspence.cheetahs
-package data
 
-type OptionT[F[_], A] = OptionTScope.OptionT[F, A]
-val OptionT = OptionTScope.OptionT
+trait Monoid[A] extends Semigroup[A]:
+  def empty: A
 
-type Endo[A] = EndoScope.Endo[A]
-val Endo = EndoScope.Endo
+  def combineAll(as: IterableOnce[A]): A =
+    as.iterator.foldLeft(empty)(combine)
+
+object Monoid:
+  def apply[A](using A: Monoid[A]): A.type = A
