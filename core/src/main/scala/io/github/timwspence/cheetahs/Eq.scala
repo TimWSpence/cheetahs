@@ -43,12 +43,6 @@ object Eq:
   given Eq[String] with
     def eqv(l: String, r: String): Boolean = l == r
 
-  given Eq[EmptyTuple] with
-    def eqv(l: EmptyTuple, r: EmptyTuple): Boolean = true
-
-  given [H, T <: Tuple](using H: Eq[H], T: Eq[T]): Eq[H *: T] with
-    def eqv(l: H *: T, r: H *: T): Boolean = H.eqv(l.head, r.head) && T.eqv(l.tail, r.tail)
-
   given eqGen[A](using inst: K0.ProductInstances[Eq, A]): Eq[A] with
     def eqv(l: A, r: A): Boolean = inst.foldLeft2(l,r)(true: Boolean)(
       [t] => (acc: Boolean, eq: Eq[t], t0: t, t1: t) => Complete(!eq.eqv(t0, t1))(false)(true)
