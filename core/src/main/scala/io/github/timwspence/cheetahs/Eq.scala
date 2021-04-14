@@ -17,12 +17,18 @@
 package io.github.timwspence.cheetahs
 
 import scala.deriving.Mirror
+import shapeless3.deriving.*
 
 trait Eq[A]:
 
   def eqv(l: A, r: A): Boolean
 
   def neqv(x: A, y: A): Boolean = !eqv(x, y)
+
+  extension (x: A)
+    infix def ===(o: A) = eqv(x, o)
+
+    infix def =!=(o: A) = neqv(x, o)
 
 object Eq:
 
@@ -43,4 +49,15 @@ object Eq:
   given [H, T <: Tuple](using H: Eq[H], T: Eq[T]): Eq[H *: T] with
     def eqv(l: H *: T, r: H *: T): Boolean = H.eqv(l.head, r.head) && T.eqv(l.tail, r.tail)
 
-  def derived[A](using M: Mirror.Of[A]): Eq[A] = ???
+  given eqGen[A](using inst: K0.ProductInstances[Eq, A]): Eq[A] with
+    def eqv(l: A, r: A): Boolean = inst.foldLeft2(l,r)(true: Boolean)(
+      [t] => (acc: Boolean, eq: Eq[t], t0: t, t1: t) => Complete(!eq.eqv(t0, t1))(false)(true)
+    )
+
+  given eqGenC[A](using inst: K0.CoproductInstances[Eq, A]): Eq[A] with
+    def eqv(l: A, r: A): Boolean = inst.fold2(l, r)(false)(
+      [t] => (eq: Eq[t], t0: t, t1: t) => eq.eqv(t0, t1)
+    )
+
+  inline def derived[A](using gen: K0.Generic[A]): Eq[A] =
+    gen.derive(eqGen, eqGenC)

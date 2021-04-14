@@ -46,7 +46,7 @@ addCommandAlias("prePR", "; project `cheetahs`; clean; scalafmtAll; headerCreate
 val DisciplineVersion = "1.0.6"
 val ScalaCheckVersion = "1.15.3"
 val MunitVersion = "0.7.23"
-val ShapelessVersion = "3.0.0-M1"
+val ShapelessVersion = "3.0.0-M2"
 
 ThisBuild / scalafixDependencies += "com.github.liancheng" %% "organize-imports" % "0.4.4"
 inThisBuild(
@@ -97,7 +97,7 @@ lazy val docs = project.in(file("cheetahs-docs"))
 lazy val commonSettings = Seq(
   organizationHomepage := Some(url("https://github.com/TimWSpence")),
   libraryDependencies ++= Seq(
-    // "org.typelevel"              %% "shapeless3-deriving"       % ShapelessVersion,
+    "org.typelevel"              %% "shapeless3-deriving"       % ShapelessVersion,
     "org.scalacheck"             %% "scalacheck"                % ScalaCheckVersion % Test,
     "org.scalameta"              %% "munit"                     % MunitVersion % Test,
     "org.scalameta"              %% "munit-scalacheck"          % MunitVersion % Test,
