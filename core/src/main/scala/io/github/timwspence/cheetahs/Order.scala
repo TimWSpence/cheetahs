@@ -68,5 +68,5 @@ object Order:
       [t] => (o: Order[t], t0: t, t1: t) => o.compare(t0, t1)
     )
 
-  inline def dervied[A](using gen: K0.Generic[A]): Eq[A] =
+  inline def derived[A](using gen: K0.Generic[A]): Eq[A] =
     gen.derive(orderGen, orderGenC)
