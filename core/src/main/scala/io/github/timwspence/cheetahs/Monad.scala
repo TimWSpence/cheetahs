@@ -21,4 +21,4 @@ trait Monad[F[_]] extends Applicative[F]:
   def flatMap[A, B](fa: F[A])(f: A => F[B]): F[B]
 
 object Monad:
-  def apply[F[_]](using F: Monad[F]): F.type = F
+  inline def apply[F[_]](using F: Monad[F]): F.type = F

@@ -23,4 +23,4 @@ trait Semigroup[A]:
     infix def |+|(o: A): A = combine(x, o)
 
 object Semigroup:
-  def apply[A](using A: Semigroup[A]): A.type = A
+  inline def apply[A](using A: Semigroup[A]): A.type = A

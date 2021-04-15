@@ -32,7 +32,7 @@ trait Eq[A]:
 
 object Eq:
 
-  def apply[A](using Eq: Eq[A]): Eq.type = Eq
+  inline def apply[A](using Eq: Eq[A]): Eq.type = Eq
 
   given Eq[Int] with
     def eqv(l: Int, r: Int): Boolean = l == r

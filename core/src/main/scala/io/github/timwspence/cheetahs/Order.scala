@@ -23,7 +23,7 @@ trait Order[A] extends Eq[A]:
   def compare(l: A, r: A): Int
 
 object Order:
-  def apply[A](using Order: Order[A]): Order.type = Order
+  inline def apply[A](using Order: Order[A]): Order.type = Order
 
   given Order[Boolean] with
     import Eq.{given_Eq_Boolean as delegate}
@@ -64,6 +64,7 @@ object Order:
 
     def eqv(l: A, r: A): Boolean = delegate.eqv(l, r)
 
+    //TODO fix this once Shapeless PR is merged
     def compare(l: A, r: A): Int = inst.fold2(l, r)(0: Int)(
       [t] => (o: Order[t], t0: t, t1: t) => o.compare(t0, t1)
     )

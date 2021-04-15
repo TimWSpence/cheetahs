@@ -20,7 +20,7 @@ trait Functor[F[_]]:
   def map[A, B](fa: F[A])(f: A => B): F[B]
 
 object Functor:
-  def apply[F[_]](using F: Functor[F]): F.type = F
+  inline def apply[F[_]](using F: Functor[F]): F.type = F
 
   given Functor[List] with
     def map[A, B](fa: List[A])(f: A => B): List[B] =

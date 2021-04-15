@@ -22,4 +22,4 @@ trait Applicative[F[_]] extends Functor[F]:
   def ap[A, B](ff: F[A => B])(fa: F[A]): F[B]
 
 object Applicative:
-  def apply[F[_]](using F: Applicative[F]): F.type = F
+  inline def apply[F[_]](using F: Applicative[F]): F.type = F

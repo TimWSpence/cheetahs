@@ -23,4 +23,4 @@ trait Monoid[A] extends Semigroup[A]:
     as.iterator.foldLeft(empty)(combine)
 
 object Monoid:
-  def apply[A](using A: Monoid[A]): A.type = A
+  inline def apply[A](using A: Monoid[A]): A.type = A
