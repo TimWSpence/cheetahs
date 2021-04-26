@@ -21,5 +21,8 @@ trait Applicative[F[_]] extends Functor[F]:
 
   def ap[A, B](ff: F[A => B])(fa: F[A]): F[B]
 
+  def liftA2[A, B, C](f: (A, B) => C)(fa: F[A])(fb: F[B]): F[C] =
+    ap(map(fa)(a => (b: B) => f(a, b)))(fb)
+
 object Applicative:
   inline def apply[F[_]](using F: Applicative[F]): F.type = F
