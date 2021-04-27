@@ -16,12 +16,6 @@
 
 package io.github.timwspence.cheetahs
 
-trait Monad[F[_]] extends Applicative[F]:
 
-  extension [A](fa: F[A])
-    def flatMap[B](f: A => F[B]): F[B]
-
-    infix def >>[B](fb: => F[B]): F[B] = flatMap(_ => fb)
-
-object Monad:
-  inline def apply[F[_]](using F: Monad[F]): F.type = F
+type Id = [t] =>> t
+type Const[X] = [t] =>> X

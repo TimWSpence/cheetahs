@@ -16,12 +16,24 @@
 
 package io.github.timwspence.cheetahs
 
-trait Monad[F[_]] extends Applicative[F]:
+// import Coerce.*
+// import data.*
 
-  extension [A](fa: F[A])
-    def flatMap[B](f: A => F[B]): F[B]
+// case class Product(x: String, y: Boolean) derives Eq
 
-    infix def >>[B](fb: => F[B]): F[B] = flatMap(_ => fb)
+// enum Coproduct derives Eq:
+//   case Left(x: String)
+//   case Right(y: Boolean)
 
-object Monad:
-  inline def apply[F[_]](using F: Monad[F]): F.type = F
+// trait Test[A]:
+//   def foo: String
+
+// object Test:
+//   trait TestImpl[A] extends Test[A]:
+//     def foo = "foo"
+
+//   given [A]: Test[A] = new TestImpl[A] {}
+
+sealed trait Maybe[A] derives Show, Functor
+case class Just[A](value: A) extends Maybe[A]
+case class Nufin[A]() extends Maybe[A]
