@@ -49,21 +49,5 @@ object Traverse:
         def traverse[G[_] : Applicative, B](f: A => G[B]): G[Const[X][B]] =
           Applicative[G].pure(fa)
 
-    inline given [F[_]](using inst : => K1.ProductInstances[Traverse, F], gen: => K1.ProductGeneric[F]): Traverse[F] with
-
-      import Functor.functorGen as delegate
-
-      extension [A](fa: F[A])
-        def map[B](f: A => B): F[B] = delegate[F].map(fa)(f)
-
-        def traverse[G[_], B](f: A => G[B])(using G: Applicative[G]): G[F[B]] =
-          G.map(
-            inst.foldLeft[A, G[Tuple]](fa)(G.pure(EmptyTuple) : G[Tuple])(
-              [t[_]] => (acc: G[Tuple], trav: Traverse[t], ta: t[A]) =>
-                Continue(
-                  G.ap(
-                    G.map(acc)((t: Tuple) => (x: t[B]) => t ++ Tuple(x) : Tuple)
-                  )(trav.traverse(ta)(f))
-                )
-            )
-          )(t => gen.fromRepr(_))
+    //TODO fix when https://github.com/milessabin/shapeless/pull/1144 is released
+    inline given [F[_]](using inst : => K1.ProductInstances[Traverse, F], gen: => K1.ProductGeneric[F]): Traverse[F] = ???
